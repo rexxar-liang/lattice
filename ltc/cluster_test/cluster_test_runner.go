@@ -406,7 +406,7 @@ func (runner *clusterTestRunner) command(arg ...string) *exec.Cmd {
 	command := exec.Command(runner.ltcExecutablePath, arg...)
 	appName := "APP_NAME=LATTICE-TEST-APP"
 	cliHome := fmt.Sprintf("LATTICE_CLI_HOME=%s", runner.latticeCliHome)
-	command.Env = []string{cliHome, appName}
+	command.Env = append(os.Environ(), cliHome, appName)
 	return command
 }
 
