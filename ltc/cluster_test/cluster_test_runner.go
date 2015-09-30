@@ -25,6 +25,7 @@ import (
 
 	"github.com/cloudfoundry-incubator/lattice/ltc/config"
 	"github.com/cloudfoundry-incubator/lattice/ltc/terminal/colors"
+	"github.com/cloudfoundry-incubator/lattice/ltc/test_helpers"
 	"github.com/nu7hatch/gouuid"
 )
 
@@ -258,7 +259,7 @@ func (runner *clusterTestRunner) cloneRepo(timeout time.Duration, repoURL string
 	Expect(err).NotTo(HaveOccurred())
 
 	expectExitInBuffer(timeout, session, session.Err)
-	Eventually(session.Err).Should(gbytes.Say(fmt.Sprintf("Cloning into '%s'...", tmpDir)))
+	Eventually(session.Err).Should(test_helpers.Say(fmt.Sprintf("Cloning into '%s'...", tmpDir)))
 
 	fmt.Fprintf(getStyledWriter("test"), "Cloned %s into %s\n", repoURL, tmpDir)
 
