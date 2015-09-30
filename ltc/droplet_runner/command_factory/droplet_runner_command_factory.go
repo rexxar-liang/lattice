@@ -619,6 +619,7 @@ func (factory *DropletRunnerCommandFactory) exportDroplet(context *cli.Context) 
 		factory.ExitHandler.Exit(exit_codes.CommandFailed)
 		return
 	}
+	defer dropletWriter.Close()
 
 	_, err = io.Copy(dropletWriter, dropletReader)
 	if err != nil {
@@ -633,6 +634,7 @@ func (factory *DropletRunnerCommandFactory) exportDroplet(context *cli.Context) 
 		factory.ExitHandler.Exit(exit_codes.CommandFailed)
 		return
 	}
+	defer metadataWriter.Close()
 
 	_, err = io.Copy(metadataWriter, metadataReader)
 	if err != nil {
