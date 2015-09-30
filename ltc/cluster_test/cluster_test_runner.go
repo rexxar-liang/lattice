@@ -116,7 +116,7 @@ func defineTheGinkgoTests(runner *clusterTestRunner, timeout time.Duration) {
 
 				It("should run a docker app", func() {
 					debugLogsStream := runner.streamDebugLogs(timeout)
-					defer func() { debugLogsStream.Terminate().Wait() }()
+					defer func() { debugLogsStream.Terminate().Wait(timeout) }()
 
 					runner.createDockerApp(timeout, appName, "cloudfoundry/lattice-app", fmt.Sprintf("--timeout=%s", timeout.String()), "--working-dir=/", "--env", "APP_NAME", "--", "/lattice-app", "--message", "Hello Lattice User", "--quiet")
 
@@ -124,10 +124,10 @@ func defineTheGinkgoTests(runner *clusterTestRunner, timeout time.Duration) {
 
 					Eventually(debugLogsStream.Out, timeout).Should(gbytes.Say("rep.*cell-\\d+"))
 					Eventually(debugLogsStream.Out, timeout).Should(gbytes.Say("garden-linux.*cell-\\d+"))
-					debugLogsStream.Terminate().Wait()
+					debugLogsStream.Terminate().Wait(timeout)
 
 					logsStream := runner.streamLogs(timeout, appName)
-					defer func() { logsStream.Terminate().Wait() }()
+					defer func() { logsStream.Terminate().Wait(timeout) }()
 
 					Eventually(logsStream.Out, timeout).Should(gbytes.Say("LATTICE-TEST-APP. Says Hello Lattice User."))
 
