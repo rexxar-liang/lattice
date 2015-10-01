@@ -112,9 +112,17 @@ lattice_tgz = File.join(File.dirname(__FILE__), "lattice.tgz")
 lattice_url = defined?(LATTICE_URL) && LATTICE_URL
 
 def download_lattice_tgz(url)
-  unless system('curl', '-sfo', 'lattice.tgz', url)
-    puts "Failed to download #{url}."
-    exit(1)
+  uri=URI(url)
+  Net::HTTP.start(uri.host, uri.port) do |http|
+    request = Net::HTTP::Get.new(uri)
+    http.request(request) do |response|
+      open('lattice.tgz', 'wb') do |io|
+        response.read_body do |chunk|
+          io.write(chunk)
+          sleep(0.005)
+        end
+      end
+    end
   end
 end
 
